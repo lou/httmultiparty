@@ -3,6 +3,19 @@ gem 'multipart-post'
 require 'httparty'
 require 'net/http/post/multipart'
 
+module Parts
+  class ParamPart
+    def build_part(boundary, name, value)
+      value.force_encoding('BINARY') if value.respond_to?(:force_encoding)
+      part = ''
+      part << "--#{boundary}\r\n"
+      part << "Content-Disposition: form-data; name=\"#{name.to_s}\"\r\n"
+      part << "\r\n"
+      part << "#{value}\r\n"
+    end
+  end
+end
+
 module HTTMultiParty
   QUERY_STRING_NORMALIZER = Proc.new do |params|
     HTTMultiParty.flatten_params(params).map do |(k,v)|
