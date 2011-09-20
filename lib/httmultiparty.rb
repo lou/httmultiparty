@@ -30,7 +30,7 @@ module HTTMultiParty
 
   def self.file_to_upload_io(file)
     filename =  File.split(file.path).last
-    content_type = 'application/octet-stream'
+    content_type = file.respond_to?("content_type") ? file.content_type : 'application/octet-stream'
     UploadIO.new(file, content_type, filename)
   end
 
